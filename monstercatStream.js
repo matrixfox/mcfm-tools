@@ -32,37 +32,22 @@ function MonstercatStream(opts) {
     var self = this;
 
     var client = new irc.Client('irc.twitch.tv', opts.user, {
-        port: 443,
+        port: 80,
         password: opts.oauth,
         channels: ['#monstercat']
     });
 
     client.on('message', function (nick, to, text, message) {
         if (nick == 'monstercat') {
-            var res = /Now Playing: (.*) by (.*) - Listen now: (.*)/.exec(text);
+            var res = /Now Playing: (.*) by (.*)/.exec(text);
             if (res) {
                 var song = res[1];
                 var artist = res[2];
-                var spotify = res[3];
 
-                if (opts.spotifyAlbumArt) {
-                    getAlbumArt(spotify).then(function(albumArt) {
-                        self.emit('song', {
-                            song: song,
-                            artist: artist,
-                            spotify: spotify,
-                            art: albumArt
-                        });
-                    }).catch(function(error) {
-                        console.log('Could not donwload album art:', error);
-                    });
-                } else {
-                    self.emit('song', {
-                        song: song,
-                        artist: artist,
-                        spotify: spotify
-                    })
-                }
+                self.emit('song', {
+                    song: song,
+                    artist: artist
+                })
 
             }
         }
