@@ -62,13 +62,21 @@ function getData(song) {
     return format(opts.format, song);
 }
 
+var lastTrack = '';
+
 function saveFile(file, song) {
     var data = getData(song);
-    fs.writeFile(file, '\n'+data, { flag: "a" }, function(err) {
-        if (err) {
-            console.log('Could not save file: ', err);
-        }
-    })
+
+    if (data != lastTrack) {
+        lastTrack = data;
+
+        fs.writeFile(file, '\n'+data, { flag: "a" }, function(err) {
+            if (err) {
+                console.log('Could not save file: ', err);
+            }
+        })
+    }
+
 }
 
 monstercat.on('song', function (song) {
