@@ -64,7 +64,7 @@ function getData(song) {
 
 function saveFile(file, song) {
     var data = getData(song);
-    fs.writeFile(file, data, function(err) {
+    fs.writeFile(file, '\n'+data, { flag: "a" }, function(err) {
         if (err) {
             console.log('Could not save file: ', err);
         }
